@@ -1,9 +1,16 @@
 class Game
   def initialize(players)
     @players = players
-    @current_player = players[0]
+    @player_index = 0
+    @current_player = @players[@player_index]
     @over = false
   end
 
-  attr_reader :over
+  def next_player
+    @player_index = (@player_index == 0) ? 1 : 0
+    @current_player = @players[@player_index]
+  end
+
+  attr_reader :current_player
+  attr_accessor :over
 end
