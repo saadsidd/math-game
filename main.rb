@@ -6,21 +6,33 @@ player1 = Player.new('Player 1')
 player2 = Player.new('Player 2')
 game = Game.new([player1, player2])
 
-i = 0
 while !game.over
+  
   question = Question.new
-  puts "#{game.current_player.name}: What does #{question.prompt} equal?"
+  player = game.current_player
+  opponent = game.other_player
+
+  puts "#{opponent.name}: What does #{question.prompt} equal?"
   print "> "
-  guess = gets.chomp
-  if guess.to_i == question.answer
-    game.over = true
+  guess = gets.chomp.to_i
+  
+  if guess != question.answer
+    puts "#{opponent.name}: Seriously? No!"
+    player.lose_life
+  else
+    puts "#{opponent.name}: YES! You are correct."
   end
-  puts question.answer
-  game.next_player
 
+  game.scoreboard
 
-  i += 1
-  game.over = true if i > 6
+  if player.lives == 0
+    puts "#{opponent.name} wins with a score of #{opponent.lives}/3"
+    game.over = true
+  else
+    puts "----- NEW TURN -----"
+    game.player_change
+  end
+
 end
 
 puts "----- GAME OVER -----"
